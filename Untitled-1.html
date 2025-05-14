@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Marketplace riski ismunandar</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  body, html {
+    margin: 0; padding: 0;
+    font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #121212;
+    color: #e0e0e0;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap');
+
+  main {
+    max-width: 1100px;
+    margin: 90px auto 40px auto;
+    padding: 0 40px 50px;
+  }
+
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 70px;
+    background: rgba(18, 18, 18, 0.95);
+    border-bottom: 3px solid #ff6600;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1001;
+    font-weight: 600;
+    font-size: 1.1rem;
+    letter-spacing: 0.07em;
+  }
+  nav ul {
+    list-style: none;
+    display: flex;
+    gap: 36px;
+    margin: 0;
+    padding: 0;
+  }
+  nav a {
+    color: #fc7600;
+    text-decoration: none;
+    padding: 10px 15px;
+    border-radius: 8px;
+    transition: background-color 0.4s ease, color 0.3s ease, transform 0.25s ease;
+    white-space: nowrap;
+    display: inline-block;
+  }
+  nav a:hover,
+  nav a.active {
+    color: #121212;
+    background: #ff6600;
+    box-shadow: 0 18px 28px -12px rgba(255, 123, 0, 0.6);
+    transform: scale(1.12);
+  }
+
+  section {
+    margin-bottom: 90px;
+    background: #1e1e1e;
+    border-radius: 18px;
+    padding: 32px 48px 40px;
+    box-shadow: 0 10px 28px rgba(255 102 0 / 0.4);
+    transition: box-shadow 0.3s ease;
+  }
+  section:hover {
+    box-shadow: 0 20px 42px rgba(255 102 0 / 0.65);
+  }
+  section h2 {
+    border-bottom: 5px solid #ff6600;
+    padding-bottom: 12px;
+    margin-bottom: 30px;
+    font-weight: 700;
+    color: #ff6600;
+    font-size: 2rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 28px 36px;
+    justify-items: center;
+  }
+  .product-card {
+    background: #292929;
+    border-radius: 22px;
+    max-width: 220px;
+    padding: 20px 18px 28px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: #e0e0e0;
+    box-shadow: 0 16px 30px rgba(255, 102, 0, 0.35);
+    cursor: pointer;
+    transition: all 0.4s ease;
+    user-select: none;
+  }
+  .product-card:focus,
+  .product-card:hover {
+    box-shadow: 0 28px 58px rgba(255, 102, 0, 0.75);
+    transform: translateY(-6px);
+    outline: none;
+  }
+  .product-card img {
+    max-width: 100%;
+    border-radius: 16px;
+    margin-bottom: 14px;
+    filter: drop-shadow(0 6px 8px rgba(255, 102, 0, 0.55));
+    transition: filter 0.3s ease;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+  .product-card:hover img {
+    filter: drop-shadow(0 10px 14px rgba(255, 102, 0, 0.8));
+  }
+  .product-title {
+    font-weight: 700;
+    margin-bottom: 10px;
+    text-align: center;
+    color: #ff8c00;
+    font-size: 1.15rem;
+    letter-spacing: 0.03em;
+  }
+  .product-price {
+    color: #0091ff;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 14px;
+  }
+  .product-card button {
+    margin-top: auto;
+    padding: 10px 22px;
+    background: #ff6600;
+    color: #121212;
+    border: none;
+    border-radius: 20px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.45s ease;
+  }
+  .product-card button:hover {
+    background: #cc5200;
+    color: #fff;
+  }
+
+  .categories-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: start;
+  }
+  .category {
+    flex: 1 1 180px;
+    background: #2f2f2f;
+    border-radius: 22px;
+    padding: 18px 16px;
+    font-weight: 800;
+    color: #ff8c00;
+    text-align: center;
+    box-shadow: 0 0 10px #ff6600 inset;
+    cursor: pointer;
+    user-select: none;
+    transition: background-color 0.4s ease, color 0.35s ease, transform 0.35s ease;
+    font-size: 1.15rem;
+    letter-spacing: 0.02em;
+  }
+  .category:hover,
+  .category:focus {
+    background: #ff6600;
+    color: #121212;
+    transform: scale(1.08);
+    outline: none;
+    box-shadow: 0 0 15px #ff6600;
+  }
+
+  .about-text {
+    font-size: 1.15rem;
+    line-height: 1.8;
+    color: #e0e0e0;
+    font-weight: 400;
+    max-width: 900px;
+  }
+
+  .steps {
+    list-style: none;
+    padding-left: 0;
+    font-size: 1.15rem;
+    color: #c0c0c0;
+    max-width: 800px;
+  }
+  .steps li {
+    background: #2f2f2f;
+    margin-bottom: 20px;
+    padding: 18px 28px;
+    border-radius: 28px;
+    border-left: 10px solid #ff6600;
+    box-shadow: 0 6px 20px rgba(255, 102, 0, 0.35);
+    font-weight: 700;
+    letter-spacing: 0.035em;
+    transition: background-color 0.3s ease;
+  }
+  .steps li:hover {
+    background: #ff6600;
+    color: #121212;
+  }
+
+  form {
+    display: flex;
+    flex-direction: column;
+    max-width: 600px;
+  }
+  label {
+    font-weight: 700;
+    margin-bottom: 8px;
+    margin-top: 18px;
+    font-size: 1.2rem;
+    color: #ff8c00;
+  }
+  input, textarea {
+    padding: 14px 18px;
+    font-size: 1.15rem;
+    border: 2.5px solid #333;
+    border-radius: 24px;
+    resize: vertical;
+    background: #121212;
+    color: #e0e0e0;
+    box-shadow: 0 1px 10px rgba(255 102 0 / 0.3);
+    transition: border-color 0.35s ease, box-shadow 0.35s ease;
+  }
+  input::placeholder, textarea::placeholder {
+    color: #999;
+  }
+  input:focus, textarea:focus {
+    outline: none;
+    border-color: #ff6600;
+    box-shadow: 0 0 18px #ff6600;
+  }
+  button.submit-btn {
+    margin-top: 30px;
+    padding: 18px;
+    background: #ff6600;
+    border: none;
+    border-radius: 28px;
+    color: #121212;
+    font-weight: 800;
+    font-size: 1.25rem;
+    cursor: pointer;
+    letter-spacing: 0.06em;
+    box-shadow: 0 12px 32px rgba(255, 102, 0, 0.5);
+    transition: background-color 0.55s ease, box-shadow 0.4s ease;
+  }
+  button.submit-btn:hover {
+    background: #cc5200;
+    box-shadow: 0 16px 38px rgba(255, 102, 0, 0.8);
+    color: #fff;
+  }
+  #contactStatus {
+    margin-top: 20px;
+    font-weight: 700;
+    color: #ff8c00;
+    font-style: italic;
+    min-height: 28px;
+  }
+
+
+  .cart-list {
+    list-style: none;
+    padding-left: 0;
+    max-width: 700px;
+  }
+  .cart-list li {
+    margin-bottom: 18px;
+    border-bottom: 1.8px solid #333;
+    padding-bottom: 14px;
+    display: flex;
+    justify-content: space-between;
+    font-weight: 700;
+    color: #e0e0e0;
+    font-size: 1.15rem;
+    align-items: center;
+  }
+  .cart-list li button {
+    margin-left: 20px;
+    cursor: pointer;
+    background: #0091ff;
+    border: none;
+    color: #121212;
+    border-radius: 18px;
+    font-size: 0.9rem;
+    padding: 7px 15px;
+    font-weight: 700;
+    transition: background-color 0.35s ease;
+  }
+  .cart-list li button:hover {
+    background: #007acc;
+    color: #fff;
+  }
+  .empty-cart {
+    color: #999;
+    font-style: italic;
+    text-align: center;
+    font-weight: 600;
+    font-size: 1.15rem;
+    padding: 36px 0;
+  }
+
+
+  @media (max-width: 1200px) {
+    main {
+      max-width: 95%;
+      padding: 0 24px 40px;
+    }
+    nav ul {
+      gap: 26px;
+    }
+    section {
+      padding: 28px 30px 36px;
+      margin-bottom: 70px;
+    }
+    .product-card {
+      max-width: 190px;
+      padding: 18px 14px 26px;
+    }
+  }
+  @media (max-width: 768px) {
+    nav ul {
+      gap: 18px;
+    }
+    nav {
+      font-size: 1rem;
+      height: 60px;
+    }
+    section h2 {
+      font-size: 1.6rem;
+    }
+    .product-card {
+      max-width: 160px;
+    }
+  }
+  @media (max-width: 480px) {
+    nav ul {
+      flex-wrap: wrap;
+      gap: 14px;
+      justify-content: center;
+    }
+    nav {
+      font-size: 0.9rem;
+      height: auto;
+      padding: 10px 0;
+    }
+    main {
+      margin: 90px auto 40px;
+      padding: 0 20px 30px;
+    }
+    section {
+      margin-bottom: 50px;
+      padding: 22px 24px 28px;
+    }
+    section h2 {
+      font-size: 1.4rem;
+    }
+    .products-grid {
+      grid-template-columns: repeat(auto-fit,minmax(140px,1fr));
+      gap: 18px 24px;
+    }
+    .product-card {
+      max-width: 140px;
+      padding: 16px 12px 22px;
+    }
+    .category {
+      flex: 1 1 100%;
+      font-size: 1.1rem;
+      padding: 14px 12px;
+    }
+  }
+
+</style>
+</head>
+<body>
+<nav aria-label="Navigasi Utama">
+  <ul>
+    <li><a href="#home" class="nav-link active" data-target="home" aria-label="Ke bagian Beranda">Beranda</a></li>
+    <li><a href="#products" class="nav-link" data-target="products" aria-label="Ke bagian Produk Kami">Produk Kami</a></li>
+    <li><a href="#categories" class="nav-link" data-target="categories" aria-label="Ke bagian Kategori">Kategori</a></li>
+    <li><a href="#about" class="nav-link" data-target="about" aria-label="Ke bagian Tentang Kami">Tentang Kami</a></li>
+    <li><a href="#howitworks" class="nav-link" data-target="howitworks" aria-label="Ke bagian Cara Kerja">Cara Kerja</a></li>
+    <li><a href="#contact" class="nav-link" data-target="contact" aria-label="Ke bagian Kontak">Kontak</a></li>
+    <li><a href="#cart" class="nav-link" data-target="cart" aria-label="Ke bagian Keranjang Belanja">Keranjang</a></li>
+  </ul>
+</nav>
+
+<main>
+  <section id="home" tabindex="-1" aria-label="Bagian Beranda">
+    <h2>Selamat Datang di Marketplace Riski ismunandar</h2>
+    <p>Temukan segala produk berkualitas dari penjual terpercaya. Berbelanja dengan mudah dan cepat di marketplace kami.</p>
+    <img src="https://i.pinimg.com/736x/16/f8/e3/16f8e3a8a7922d553eabc197d4563b0d.jpg" alt="Banner Marketplace" style="width:100%;border-radius:24px;object-fit:cover; height:260px; margin-top:20px; box-shadow: 0 10px 30px rgba(255, 102, 0, 0.5);">
+  </section>
+
+  <section id="products" tabindex="-1" aria-label="Bagian Produk Kami">
+    <h2>Produk Kami</h2>
+    <div class="products-grid" id="product-list">
+
+    </div>
+  </section>
+
+  <section id="categories" tabindex="-1" aria-label="Bagian Kategori">
+    <h2>Kategori</h2>
+    <div class="categories-list" id="category-list" role="list">
+
+    </div>
+  </section>
+
+  <section id="about" tabindex="-1" aria-label="Bagian Tentang Kami">
+    <h2>Tentang Kami</h2>
+    <p class="about-text">
+      Marketplace ini hadir untuk menghubungkan pembeli dan penjual dengan mudah. Misi kami adalah menyediakan pengalaman belanja yang aman, transparan, dan menyenangkan untuk semua orang. Kami fokus pada kualitas dan variasi produk.
+    </p>
+  </section>
+
+  <section id="howitworks" tabindex="-1" aria-label="Bagian Cara Kerja">
+    <h2>Cara Kerja</h2>
+    <ul class="steps" aria-label="Langkah penggunaan marketplace">
+      <li>1. Jelajahi dan pilih produk yang Anda sukai.</li>
+      <li>2. Tambahkan produk ke keranjang belanja Anda.</li>
+      <li>3. Lanjutkan ke pembayaran dengan metode yang aman.</li>
+      <li>4. Terima pesanan Anda di alamat yang dituju.</li>
+    </ul>
+  </section>
+
+  <section id="contact" tabindex="-1" aria-label="Bagian Kontak">
+    <h2>Kontak Kami</h2>
+    <form id="contactForm" aria-describedby="contactStatus">
+      <label for="name">Nama</label>
+      <input type="text" id="name" required placeholder="Nama Anda" aria-required="true" />
+      <label for="email">Email</label>
+      <input type="email" id="email" required placeholder="Email Anda" aria-required="true" />
+      <label for="message">Pesan</label>
+      <textarea id="message" rows="5" required placeholder="Pesan Anda" aria-required="true"></textarea>
+      <button type="submit" class="submit-btn" aria-label="Kirim pesan ke Marketplace Sederhana">Kirim Pesan</button>
+    </form>
+    <p id="contactStatus" role="alert" aria-live="polite"></p>
+  </section>
+
+  <section id="cart" tabindex="-1" aria-label="Bagian Keranjang Belanja">
+    <h2>Keranjang Belanja Anda</h2>
+    <ul class="cart-list" id="cart-list" role="list">
+      <li class="empty-cart">Keranjang Anda kosong.</li>
+    </ul>
+  </section>
+</main>
+
+<script>
+
+  const products = [
+    {id: 1, title: "Sepatu Putih Klasik", price: 499000, image: "https://i.pinimg.com/736x/1d/c6/36/1dc636766e1a94c517c83af360df071c.jpg"},
+    {id: 2, title: "Dompet Kulit", price: 275000, image: "https://i.pinimg.com/736x/4e/04/c1/4e04c1ec34f5eb74d54c2ed0f89ac68a.jpg"},
+    {id: 3, title: "Earphone Nirkabel", price: 199000, image: "https://i.pinimg.com/736x/3b/78/3e/3b783ee2748409e831a78e727d054ff0.jpg"},
+    {id: 4, title: "Meja Kayu", price: 350000, image: "https://i.pinimg.com/736x/21/42/4e/21424efe5d1e2bd288431cd97e3198df.jpg"},
+    {id: 5, title: "Jam Tangan Sport", price: 1200000, image: "https://i.pinimg.com/736x/94/27/dd/9427dd199b777fc061511aafdb2f25fb.jpg"},
+    {id: 6, title: "Kacamata Hipster", price: 150000, image: "hhttps://i.pinimg.com/736x/dd/75/96/dd75966e08a9debc5d4f3c90d28bec47.jpg"},
+    {id: 7, title: "GPU RTX 4090", price: 690000, image: "https://i.pinimg.com/736x/a4/88/3d/a4883df0054a4ea7d71443f1b815c2af.jpg"},
+    {id: 8, title: "Iphone Terbaru Terkeren", price: 300000, image: "https://pbs.twimg.com/media/E-m8s9LWUAY3LW-?format=jpg&name=large"},
+    {id: 9, title: "Lampu Meja LED", price: 220000, image: "https://i.pinimg.com/736x/ac/aa/fe/acaafe3ba020b5d94db78885ac71345d.jpg"},
+    {id: 10, title: "Patung Tempah", price: 850000, image: "https://i.pinimg.com/736x/83/3b/cb/833bcbd7801ac7741eef90a11e82a2f0.jpg"},
+    {id: 11, title: "Sweater Wol Pria", price: 399000, image: "hhttps://i.pinimg.com/736x/55/ed/72/55ed72b6e5b52608f41d9d40ea99caf3.jpg"},
+    {id: 12, title: "Sepatu Lari Ringan", price: 550000, image: "https://i.pinimg.com/736x/0c/6a/00/0c6a001fddf5c0cb8922a54ee901cc4b.jpg"}
+  ]; 
+
+  const categories = [
+    "Sepatu", "Aksesoris", "Elektronik", "Dekorasi Rumah", "Pakaian", "Olahraga", "Perjalanan", "Lampu"
+  ];
+
+  const cart = [];
+
+  function renderProducts(filterCategory = "") {
+    const container = document.getElementById("product-list");
+    container.innerHTML = "";
+    let filteredProducts = products;
+
+    if(filterCategory) {
+      filteredProducts = products.filter(p => 
+        categories.some(cat => cat.toLowerCase() === filterCategory.toLowerCase() && 
+          p.title.toLowerCase().includes(cat.toLowerCase()))
+      );
+
+      if(filteredProducts.length === 0) {
+        filteredProducts = products.filter(p => p.title.toLowerCase().includes(filterCategory.toLowerCase()));
+      }
+    }
+
+    if(filteredProducts.length === 0) {
+      container.innerHTML = "<p style='text-align:center; color:#999; font-style:italic;'>Tidak ada produk ditemukan di kategori ini.</p>";
+      return;
+    }
+
+    filteredProducts.forEach(p => {
+      const card = document.createElement("div");
+      card.className = "product-card";
+      card.tabIndex = 0;
+      card.innerHTML = `
+        <img src="${p.image}" alt="${p.title}">
+        <div class="product-title">${p.title}</div>
+        <div class="product-price">Rp ${p.price.toLocaleString('id-ID')}</div>
+        <button aria-label="Tambah ${p.title} ke keranjang">Tambah ke Keranjang</button>
+      `;
+      const btn = card.querySelector("button");
+      btn.addEventListener("click", () => addToCart(p.id));
+      container.appendChild(card);
+    });
+  }
+
+  function renderCategories() {
+    const container = document.getElementById("category-list");
+    container.innerHTML = "";
+    categories.forEach(cat => {
+      const div = document.createElement("div");
+      div.className = "category";
+      div.tabIndex = 0;
+      div.textContent = cat;
+      div.onclick = () => {
+        renderProducts(cat);
+        scrollToSection('products');
+      };
+      div.onkeypress = (e) => { if(e.key === 'Enter' || e.key === ' ') div.onclick(); };
+      container.appendChild(div);
+    });
+  }
+
+  function addToCart(productId) {
+    const product = products.find(p => p.id === productId);
+    if(!product) return;
+    cart.push(product);
+    renderCart();
+    alert(`"${product.title}" telah ditambahkan ke keranjang`);
+  }
+
+  function renderCart() {
+    const container = document.getElementById("cart-list");
+    container.innerHTML = "";
+    if(cart.length === 0) {
+      const emptyMsg = document.createElement("li");
+      emptyMsg.className = "empty-cart";
+      emptyMsg.textContent = "Keranjang Anda kosong.";
+      container.appendChild(emptyMsg);
+      return;
+    }
+    cart.forEach((item, idx) => {
+      const li = document.createElement("li");
+      li.textContent = `${item.title} - Rp ${item.price.toLocaleString('id-ID')}`;
+      const removeBtn = document.createElement("button");
+      removeBtn.textContent = "Hapus";
+      removeBtn.addEventListener("click", () => {
+        cart.splice(idx, 1);
+        renderCart();
+      });
+      li.appendChild(removeBtn);
+      container.appendChild(li);
+    });
+  }
+
+  function scrollToSection(id) {
+    const section = document.getElementById(id);
+    if(section) {
+      section.focus();
+      window.scrollTo({
+        top: section.offsetTop - 70,
+        behavior: "smooth"
+      });
+    }
+    updateActiveNav(id);
+  }
+
+  document.querySelectorAll("nav a.nav-link").forEach(link => {
+    link.addEventListener("click", e => {
+      e.preventDefault();
+      const targetId = link.dataset.target;
+      scrollToSection(targetId);
+    });
+  });
+
+  function updateActiveNav(activeId) {
+    document.querySelectorAll("nav a.nav-link").forEach(link => {
+      link.classList.toggle("active", link.dataset.target === activeId);
+    });
+  }
+
+  window.addEventListener("scroll", () => {
+    const scrollPosition = window.scrollY + 80;
+    let currentSection = "home";
+    document.querySelectorAll("main section").forEach(sec => {
+      if(scrollPosition >= sec.offsetTop) {
+        currentSection = sec.id;
+      }
+    });
+    updateActiveNav(currentSection);
+  });
+
+  const contactForm = document.getElementById("contactForm");
+  const contactStatus = document.getElementById("contactStatus");
+  contactForm.addEventListener("submit", e => {
+    e.preventDefault();
+    const nama = contactForm.name.value.trim();
+    const email = contactForm.email.value.trim();
+    const pesan = contactForm.message.value.trim();
+    if(nama && email && pesan) {
+      contactStatus.textContent = `Terima kasih telah menghubungi kami, ${nama}! Kami akan segera membalas pesan Anda.`;
+      contactForm.reset();
+      setTimeout(() => { contactStatus.textContent = ""; }, 8000);
+    }
+  });
+
+  renderCategories();
+  renderProducts();
+  renderCart();
+</script>
+</body>
+</html>
